@@ -1,2 +1,2 @@
-export { default as RTWidget } from './RTWidget';
-export type { RTWidgetProps } from './RTWidget'; 
+export { default as MedalsWidget } from './MedalsWidget';
+export type { MedalsWidgetProps } from './MedalsWidget'; 

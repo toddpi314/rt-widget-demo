@@ -1,13 +1,13 @@
 import React from 'react';
 
-export interface RTWidgetProps {
+export interface MedalsWidgetProps {
     title?: string;
     children?: React.ReactNode;
 }
 
-const RTWidget: React.FC<RTWidgetProps> = ({ title, children }) => {
+const MedalsWidget: React.FC<MedalsWidgetProps> = ({ title, children }) => {
     return (
-        <div className="rt-widget">
+        <div className="rt-widget" data-testid="rt-widget">
             {title && <h2 className="rt-widget-title">{title}</h2>}
             <div className="rt-widget-content">
                 {children}
@@ -16,4 +16,4 @@ const RTWidget: React.FC<RTWidgetProps> = ({ title, children }) => {
     );
 };
 
-export default RTWidget; 
+export default MedalsWidget; 
