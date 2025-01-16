@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -e
+
+yarn workspace @rt/widget-medals test
+yarn workspace @rt/test-integration serve-and-test

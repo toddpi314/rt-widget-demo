@@ -5,6 +5,9 @@
     "types": "dist/index.d.ts",
     "type": "module",
     "private": true,
+    "scripts": {
+        "test": "./scripts/test"
+    },
     "workspaces": [
         "packages/*"
     ],
