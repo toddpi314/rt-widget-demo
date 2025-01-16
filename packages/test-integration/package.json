@@ -1,0 +1,28 @@
+{
+  "name": "@rt/test-integration",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "webpack serve --config webpack.config.js",
+    "build": "webpack --config webpack.config.js",
+    "test": "playwright test",
+    "test:debug": "playwright test --debug",
+    "serve-and-test": "start-server-and-test 'start' 'http://localhost:8080/basic.html' 'test'"
+  },
+  "dependencies": {
+    "@playwright/test": "1.49.1",
+    "html-webpack-plugin": "5.6.3",
+    "playwright": "1.49.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "webpack-dev-server": "5.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@babel/preset-typescript": "^7.26.0",
+    "babel-loader": "^9.2.1",
+    "start-server-and-test": "^1.15.0"
+  }
+}

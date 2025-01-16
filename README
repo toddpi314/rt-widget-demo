@@ -1,0 +1,7 @@
+
+
+
+Setup Steps
+=== 
+1. `yarn install`
+1. `yarn playwright install` (this needs to be done manually to download the browsers)

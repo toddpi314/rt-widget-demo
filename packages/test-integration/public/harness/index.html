@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Widget Test Scenarios</title>
+    <style>
+        body { padding: 20px; font-family: Arial, sans-serif; }
+        .scenario-list { list-style: none; padding: 0; }
+        .scenario-list li { margin: 10px 0; }
+        .scenario-list a { 
+            text-decoration: none;
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>Widget Test Scenarios</h1>
+    <ul class="scenario-list">
+        <% scenarios.forEach(function(scenario) { %>
+            <li><a href="<%= scenario %>.html"><%= scenario %></a></li>
+        <% }); %>
+    </ul>
+</body>
+</html> 
