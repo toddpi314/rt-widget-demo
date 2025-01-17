@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MedalsWidget, { MedalsWidgetProps } from '../MedalsWidget';
 import { logger } from '../utils/logger';
+import { SortField } from '../hooks/useMedalData';
 
 // Initialize React in the window context
 (window as any).React = React;
@@ -13,7 +14,7 @@ class MedalsWidgetElement extends HTMLElement {
   private observer: MutationObserver | null = null;
 
   static get observedAttributes() {
-    return ['title', 'element_id'];
+    return ['element_id', 'sort'];
   }
 
   private async waitForDependencies() {
@@ -157,8 +158,9 @@ class MedalsWidgetElement extends HTMLElement {
       return;
     }
 
-    const title = this.getAttribute('title') || 'Medals Widget';
     const element_id = this.getAttribute('element_id');
+    const rawSort = this.getAttribute('sort');
+    const sort = (rawSort === 'total' || rawSort === 'gold' || rawSort === 'silver' || rawSort === 'bronze') ? rawSort as SortField : undefined;
     const content = this.getChildContent();
     logger.log('Rendering with content:', content);
 
@@ -166,6 +168,7 @@ class MedalsWidgetElement extends HTMLElement {
     
     const props: MedalsWidgetProps = {
       element_id: element_id || 'medals-widget',
+      sort,
       children: React.createElement('div', {
         className: 'rt-widget-content',
         'data-testid': 'rt-widget-content',
