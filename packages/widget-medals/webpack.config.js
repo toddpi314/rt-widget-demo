@@ -3,6 +3,13 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
+// Environment variables with defaults
+const envVars = {
+    MEDALS_DATA_ENDPOINT: JSON.stringify(process.env.MEDALS_DATA_ENDPOINT || '/assets/medals.json'),
+    FLAG_ASSETS_BASE_URL: JSON.stringify(process.env.FLAG_ASSETS_BASE_URL || '/assets/flags'),
+    NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+};
+
 // Common configuration
 const commonConfig = {
     mode: process.env.NODE_ENV || 'development',
@@ -30,7 +37,12 @@ const commonConfig = {
                 use: ['style-loader', 'css-loader']
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env': envVars
+        })
+    ]
 };
 
 const configs = {

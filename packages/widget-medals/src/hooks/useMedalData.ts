@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { medalsDataEndpoint } from "../app.config";
 
 interface MedalData {
   code: string;
@@ -21,7 +22,7 @@ export const useMedalData = ({ refreshInterval = 10000 }: UseMedalDataOptions = 
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   const fetchData = () => {
-    fetch('/assets/medals.json')
+    fetch(medalsDataEndpoint)
       .then(response => response.json())
       .then(jsonData => {
         const dataWithFlagKey = jsonData.map((item: any) => ({

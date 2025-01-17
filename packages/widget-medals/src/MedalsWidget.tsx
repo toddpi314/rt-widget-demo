@@ -1,6 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { SortField, useMedalData } from './hooks/useMedalData';
+import { useFlagData} from './hooks/useFlagData'
 
 export interface MedalsWidgetProps {
     element_id: string;
@@ -10,10 +11,7 @@ export interface MedalsWidgetProps {
 
 const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort = 'gold' }) => {
     const { data, toggleSort, sortField } = useMedalData();
-
-    const getFlagUrl = (flagKey: string) => {
-        return `/assets/flags/${flagKey}.png`;
-    };
+    const { getFlagAssetUrl } = useFlagData();
 
     const widgetContent = (
         <div 
@@ -87,7 +85,7 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                                 <td>
                                     {index + 1}. 
                                     <img 
-                                        src={getFlagUrl(country.flagKey)} 
+                                        src={getFlagAssetUrl(country.flagKey)} 
                                         alt={`${country.code} flag`}
                                         style={{
                                             width: '20px',
