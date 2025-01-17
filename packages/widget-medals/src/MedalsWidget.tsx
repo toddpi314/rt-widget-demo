@@ -20,15 +20,40 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
             data-sort={sort}
         >
             <div className="rt-widget-content">
-                <table className="medals-table">
+                <h2 style={{ 
+                    textAlign: 'left',
+                    margin: '10px 0',
+                    fontSize: '1.2em',
+                    fontWeight: 'bold',
+                    color: '#666'
+                }}>
+                    MEDAL COUNT
+                </h2>
+                <table className="medals-table" style={{ 
+                    tableLayout: 'fixed', 
+                    width: '100%', 
+                    minWidth: '350px',
+                    borderCollapse: 'collapse' 
+                }}>
+                    <colgroup>
+                        <col style={{ width: '40px' }} /> {/* Index column - fixed */}
+                        <col /> {/* Country column - flexible */}
+                        <col style={{ width: '45px' }} /> {/* Gold medal column - fixed */}
+                        <col style={{ width: '45px' }} /> {/* Silver medal column - fixed */}
+                        <col style={{ width: '45px' }} /> {/* Bronze medal column - fixed */}
+                        <col style={{ width: '60px' }} /> {/* Total column - fixed */}
+                    </colgroup>
                     <thead>
                         <tr>
-                            <th>Country</th>
+                            <th style={{ color: '#666', height: '30px' }}></th>
+                            <th style={{ color: '#666', height: '30px' }}></th>
                             <th 
                                 onClick={() => toggleSort('gold')}
                                 style={{
-                                    borderTop: sortField === 'gold' ? '2px solid #FFD700' : 'none',
-                                    color: '#FFD700'
+                                    borderTop: sortField === 'gold' ? '2px solid #666' : 'none',
+                                    color: '#666',
+                                    whiteSpace: 'nowrap',
+                                    height: '30px'
                                 }}
                             >
                                 <span style={{
@@ -42,8 +67,10 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                             <th 
                                 onClick={() => toggleSort('silver')}
                                 style={{
-                                    borderTop: sortField === 'silver' ? '2px solid #C0C0C0' : 'none',
-                                    color: '#C0C0C0'
+                                    borderTop: sortField === 'silver' ? '2px solid #666' : 'none',
+                                    color: '#666',
+                                    whiteSpace: 'nowrap',
+                                    height: '30px'
                                 }}
                             >
                                 <span style={{
@@ -57,8 +84,10 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                             <th 
                                 onClick={() => toggleSort('bronze')}
                                 style={{
-                                    borderTop: sortField === 'bronze' ? '2px solid #CD7F32' : 'none',
-                                    color: '#CD7F32'
+                                    borderTop: sortField === 'bronze' ? '2px solid #666' : 'none',
+                                    color: '#666',
+                                    whiteSpace: 'nowrap',
+                                    height: '30px'
                                 }}
                             >
                                 <span style={{
@@ -72,34 +101,84 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                             <th 
                                 onClick={() => toggleSort('total')}
                                 style={{
-                                    borderTop: sortField === 'total' ? '2px solid #000' : 'none'
+                                    borderTop: sortField === 'total' ? '2px solid #666' : 'none',
+                                    whiteSpace: 'nowrap',
+                                    color: '#666',
+                                    height: '30px'
                                 }}
                             >
                                 Total
                             </th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{ 
+                        borderTop: '3px solid #666',
+                        display: 'table-row-group' 
+                    }}>
                         {data.map((country, index) => (
-                            <tr key={country.code}>
-                                <td>
-                                    {index + 1}. 
+                            <tr key={country.code} style={{ 
+                                height: '25px',
+                                borderBottom: '1px solid #ccc'
+                            }}>
+                                <td style={{ 
+                                    textAlign: 'center', 
+                                    color: '#666', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}>{index + 1}</td>
+                                <td style={{ 
+                                    padding: '0 8px', 
+                                    whiteSpace: 'nowrap', 
+                                    color: '#666', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}>
                                     <img 
                                         src={getFlagAssetUrl(country.flagKey)} 
                                         alt={`${country.code} flag`}
                                         style={{
-                                            width: '20px',
-                                            height: '15px',
-                                            marginRight: '5px',
-                                            verticalAlign: 'middle'
+                                            width: '24px',
+                                            height: '18px',
+                                            marginRight: '8px',
+                                            verticalAlign: 'middle',
+                                            display: 'inline-block'
                                         }}
                                     /> 
-                                    {country.code}
+                                    <span style={{ verticalAlign: 'middle' }}>{country.code}</span>
                                 </td>
-                                <td>{country.gold}</td>
-                                <td>{country.silver}</td>
-                                <td>{country.bronze}</td>
-                                <td><strong>{country.gold + country.silver + country.bronze}</strong></td>
+                                <td style={{ 
+                                    padding: '0 8px', 
+                                    textAlign: 'center', 
+                                    color: '#666', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}>{country.gold}</td>
+                                <td style={{ 
+                                    padding: '0 8px', 
+                                    textAlign: 'center', 
+                                    color: '#666', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}>{country.silver}</td>
+                                <td style={{ 
+                                    padding: '0 8px', 
+                                    textAlign: 'center', 
+                                    color: '#666', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}>{country.bronze}</td>
+                                <td style={{ 
+                                    padding: '0 8px', 
+                                    textAlign: 'center', 
+                                    verticalAlign: 'middle',
+                                    height: '25px',
+                                    lineHeight: '25px'
+                                }}><strong>{country.gold + country.silver + country.bronze}</strong></td>
                             </tr>
                         ))}
                     </tbody>
