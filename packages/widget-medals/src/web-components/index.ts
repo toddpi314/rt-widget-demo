@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MedalsWidget, { MedalsWidgetProps } from '../MedalsWidget';
+import { logger } from '../utils/logger';
 
 // Initialize React in the window context
 (window as any).React = React;
@@ -16,11 +17,11 @@ class MedalsWidgetElement extends HTMLElement {
   }
 
   private async waitForDependencies() {
-    console.log('Waiting for React and ReactDOM...');
+    logger.log('Waiting for React and ReactDOM...');
     return new Promise<void>((resolve) => {
       const checkDeps = () => {
         if ((window as any).React?.useState && (window as any).ReactDOM?.createRoot) {
-          console.log('React and ReactDOM available with required features');
+          logger.log('React and ReactDOM available with required features');
           resolve();
           return;
         }
@@ -73,7 +74,7 @@ class MedalsWidgetElement extends HTMLElement {
   }
 
   async connectedCallback() {
-    console.log('Web component connected');
+    logger.log('Web component connected');
     
     this.mountPoint = document.createElement('div');
     this.mountPoint.setAttribute('data-testid', 'rt-widget-mount');
@@ -86,7 +87,7 @@ class MedalsWidgetElement extends HTMLElement {
     this.root = ReactDOM.createRoot(this.mountPoint);
 
     this.observer = new MutationObserver(() => {
-      console.log('Content changed, re-rendering');
+      logger.log('Content changed, re-rendering');
       this.render();
     });
     
@@ -110,20 +111,20 @@ class MedalsWidgetElement extends HTMLElement {
   }
 
   attributeChangedCallback() {
-    console.log('Attributes changed, re-rendering');
+    logger.log('Attributes changed, re-rendering');
     this.render();
   }
 
   private render() {
     if (!this.root) {
-      console.log('No root available for rendering');
+      logger.log('No root available for rendering');
       return;
     }
 
     const title = this.getAttribute('title') || 'Medals Widget';
     const element_id = this.getAttribute('element_id');
     const content = this.getChildContent();
-    console.log('Rendering with content:', content);
+    logger.log('Rendering with content:', content);
 
     this.ensureVisible();
     
