@@ -3,4 +3,4 @@
 set -e
 
 yarn workspace @rt/widget-medals test
-yarn workspace @rt/test-integration serve-and-test
+yarn workspace @rt/test-integration run "start-server-and-test start http://localhost:8080/basic.html test"

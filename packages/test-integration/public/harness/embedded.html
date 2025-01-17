@@ -12,6 +12,9 @@
         .app-container {
             border: 1px solid #ccc;
             padding: 20px;
+            display: block !important;
+            visibility: visible !important;
+            min-height: 100px !important;
         }
         .rt-widget {
             display: block;
@@ -19,7 +22,9 @@
     </style>
 </head>
 <body>
-    <h1>Embedded Widget Implementation</h1>
-    <div id="widget-container"></div>
+    <div class="app-container">
+        <h1>Embedded Widget Implementation</h1>
+        <div id="widget-container"></div>
+    </div>
 </body>
 </html> 

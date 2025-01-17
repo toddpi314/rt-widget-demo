@@ -1,22 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const fs = require('fs');
-
-// Get all test scenarios
-const scenarioFiles = fs.readdirSync(
-  path.resolve(__dirname, 'src/scenarios')
-).filter(file => file.endsWith('.js'));
-
-// Create entry points for each scenario
-const entries = {};
-scenarioFiles.forEach(file => {
-  const name = file.replace('.js', '');
-  entries[name] = `./src/scenarios/${file}`;
-});
 
 module.exports = {
   mode: 'development',
-  entry: entries,
+  entry: {}, // No entry points needed as we're serving static HTML
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
@@ -70,16 +57,17 @@ module.exports = {
     }
   },
   plugins: [
-    // Create an HTML file for each scenario
-    ...scenarioFiles.map(file => {
-      const name = file.replace('.js', '');
-      return new HtmlWebpackPlugin({
-        template: `./public/harness/${name}.html`,
-        filename: `${name}.html`,
-        chunks: [name],
-      });
+    // Static pages
+    new HtmlWebpackPlugin({
+      template: './public/harness/basic.html',
+      filename: 'basic.html',
+      inject: false,
     }),
-    // Non-bundled pages
+    new HtmlWebpackPlugin({
+      template: './public/harness/embedded.html',
+      filename: 'embedded.html',
+      inject: false,
+    }),
     new HtmlWebpackPlugin({
       template: './public/harness/cdn.html',
       filename: 'cdn.html',
@@ -112,7 +100,8 @@ module.exports = {
       inject: false,
       templateParameters: {
         scenarios: [
-          ...scenarioFiles.map(f => f.replace('.js', '')),
+          'basic',
+          'embedded',
           'cdn',
           'script-embed',
           'iframe-embed',

@@ -11,6 +11,13 @@
         margin: 0;
         padding: 0;
       }
+      #widget-container {
+        display: block !important;
+        visibility: visible !important;
+        min-height: 100px !important;
+        height: auto !important;
+        opacity: 1 !important;
+      }
     </style>
   </head>
   <body>
@@ -21,13 +28,18 @@
       const root = ReactDOM.createRoot(container);
       const MedalsWidget = RTWidgetMedals.default;
       
+      console.log('Creating root');
       root.render(
         React.createElement(MedalsWidget, { 
           title: params.get('title') || 'Medals Widget'
         },
-        React.createElement('div', null, "IFrame embedded content")
+        React.createElement('div', {
+          className: 'rt-widget-content',
+          'data-testid': 'rt-widget-content'
+        }, "IFrame embedded content")
         )
       );
+      console.log('Widget rendered');
     </script>
   </body>
 </html> 

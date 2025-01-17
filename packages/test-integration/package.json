@@ -3,11 +3,27 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "dev": "start-server-and-test start http://localhost:8080/basic.html test:chrome",
     "start": "webpack serve --config webpack.config.js",
     "build": "webpack --config webpack.config.js",
     "test": "playwright test",
     "test:debug": "playwright test --debug",
-    "serve-and-test": "start-server-and-test start http://localhost:8080/basic.html test"
+    "test:snapshots": "playwright test --update-snapshots",
+    "test:snapshots:update": "playwright test --update-snapshots",
+    "test:visual": "playwright test --grep \"visual regression\"",
+    "test:visual:update": "playwright test --grep \"visual regression\" --update-snapshots",
+    "test:report": "playwright show-report test-results",
+    "test:chrome": "playwright test --project=chromium-latest",
+    "test:chrome:previous": "playwright test --project=chromium-previous",
+    "test:firefox": "playwright test --project=firefox-latest",
+    "test:firefox:previous": "playwright test --project=firefox-previous",
+    "test:safari": "playwright test --project=webkit-latest",
+    "test:mobile": "playwright test --project=\"Mobile Chrome Latest\" --project=\"Mobile Safari Latest\"",
+    "test:tablet": "playwright test --project=\"iPad Latest\" --project=\"iPad Previous\"",
+    "test:legacy": "playwright test --project=chromium-min --project=firefox-min",
+    "test:ci": "playwright test --reporter=github",
+    "serve-and-test:ci": "start-server-and-test start http://localhost:8080/basic.html test:ci",
+    "serve-and-test": "start-server-and-test start http://localhost:8080/basic.html test:chrome"
   },
   "dependencies": {
     "@playwright/test": "1.49.1",

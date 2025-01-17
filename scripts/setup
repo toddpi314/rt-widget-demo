@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+yarn install
+yarn playwright install
+yarn playwright install chrome-beta
+yarn playwright install firefox-beta
+yarn playwright install webkit-beta
