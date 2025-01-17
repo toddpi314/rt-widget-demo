@@ -3,7 +3,12 @@ import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { MedalsWidgetProps } from '../../widget-medals/src/MedalsWidget';
 
-const RTWidgetMedals = (props: MedalsWidgetProps) => <div data-testid="rt-widget">{props.title && <h1>{props.title}</h1>}{props.children}</div>;
+const RTWidgetMedals = (props: MedalsWidgetProps) => (
+    <div data-testid="rt-widget" data-sort={props.sort || 'gold'}>
+        {props.title && <h1>{props.title}</h1>}
+        {props.children}
+    </div>
+);
 
 describe('MedalsWidget', () => {
     it('renders without crashing', () => {
@@ -31,5 +36,15 @@ describe('MedalsWidget', () => {
         render(<RTWidgetMedals element_id="test-widget" />);
         const titleElements = screen.queryAllByRole('heading');
         expect(titleElements).toHaveLength(0);
+    });
+
+    it('uses gold as default sort value', () => {
+        const { container } = render(<RTWidgetMedals element_id="test-widget" />);
+        expect(container.firstChild).toHaveAttribute('data-sort', 'gold');
+    });
+
+    it('accepts custom sort value', () => {
+        const { container } = render(<RTWidgetMedals element_id="test-widget" sort="total" />);
+        expect(container.firstChild).toHaveAttribute('data-sort', 'total');
     });
 }); 
