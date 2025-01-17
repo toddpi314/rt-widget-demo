@@ -1,6 +1,12 @@
 #!/bin/bash
 
 set -e
+yarn workspace @rt/widget-medals build
 
 yarn workspace @rt/widget-medals test
-yarn workspace @rt/test-integration run "start-server-and-test start http://localhost:8080/basic.html test"
+
+if [ "$CI" = "true" ]; then
+  yarn workspace @rt/test-integration run serve-and-test:ci
+else
+  yarn workspace @rt/test-integration run serve-and-test
+fi
