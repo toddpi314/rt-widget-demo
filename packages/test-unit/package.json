@@ -1,0 +1,32 @@
+{
+  "name": "@rt/test-unit",
+  "version": "1.0.0",
+  "description": "Unit testing configuration and utilities",
+  "main": "dist/index.js",
+  "license": "UNLICENSED",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "^14.1.2",
+    "@testing-library/user-event": "^14.5.1",
+    "@types/jest": "^29.5.11",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@babel/preset-env": "^7.23.7",
+    "@babel/preset-react": "^7.23.7",
+    "@babel/preset-typescript": "^7.23.7",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "identity-obj-proxy": "^3.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

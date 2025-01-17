@@ -7,7 +7,7 @@ module.exports = {
     moduleNameMapper: {
         '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     },
-    setupFilesAfterEnv: ['<rootDir>/test/setupTests.ts', '<rootDir>/test/test-utils/setup.ts'],
+    setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
     testMatch: [
         '<rootDir>/test/**/*.{spec,test}.{js,jsx,ts,tsx}'
     ],
@@ -24,5 +24,6 @@ module.exports = {
             lines: 80,
             statements: 80
         }
-    }
+    },
+    moduleDirectories: ['node_modules', '<rootDir>/../../node_modules']
 }; 

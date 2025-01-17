@@ -3,7 +3,7 @@
 set -e
 yarn workspace @rt/widget-medals build
 
-yarn workspace @rt/widget-medals test
+yarn workspace @rt/test-unit test
 
 if [ "$CI" = "true" ]; then
   yarn workspace @rt/test-integration run serve-and-test:ci
