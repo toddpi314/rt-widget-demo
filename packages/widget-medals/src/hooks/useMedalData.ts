@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 
 interface MedalData {
   code: string;
@@ -8,30 +8,46 @@ interface MedalData {
   flagKey: string;
 }
 
-// Sample data
-const initialData: MedalData[] = [
-  { code: "USA", gold: 9, silver: 7, bronze: 12, flagKey: "usa" },
-  { code: "NOR", gold: 11, silver: 5, bronze: 10, flagKey: "nor" },
-  { code: "RUS", gold: 13, silver: 11, bronze: 9, flagKey: "rus" },
-  { code: "NED", gold: 8, silver: 7, bronze: 9, flagKey: "ned" },
-  { code: "FRA", gold: 4, silver: 4, bronze: 7, flagKey: "fra" },
-  { code: "SWE", gold: 2, silver: 7, bronze: 6, flagKey: "swe" },
-  { code: "ITA", gold: 0, silver: 2, bronze: 6, flagKey: "ita" },
-  { code: "CAN", gold: 10, silver: 10, bronze: 5, flagKey: "can" },
-  { code: "SUI", gold: 6, silver: 3, bronze: 2, flagKey: "sui" },
-  { code: "BLR", gold: 5, silver: 0, bronze: 1, flagKey: "blr" },
-  { code: "GER", gold: 8, silver: 6, bronze: 5, flagKey: "ger" },
-  { code: "AUT", gold: 4, silver: 8, bronze: 5, flagKey: "aut" },
-  { code: "CHN", gold: 3, silver: 4, bronze: 2, flagKey: "chn" },
-];
-
 export type SortField = "total" | "gold" | "silver" | "bronze";
 type SortOrder = "asc" | "desc";
 
-export const useMedalData = () => {
-  const [data, setData] = useState<MedalData[]>(initialData);
+interface UseMedalDataOptions {
+  refreshInterval?: number;
+}
+
+export const useMedalData = ({ refreshInterval = 10000 }: UseMedalDataOptions = {}) => {
+  const [data, setData] = useState<MedalData[]>([]);
   const [sortField, setSortField] = useState<SortField>("total");
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+
+  const fetchData = () => {
+    fetch('/assets/medals.json')
+      .then(response => response.json())
+      .then(jsonData => {
+        const dataWithFlagKey = jsonData.map((item: any) => ({
+          ...item,
+          flagKey: item.code.toLowerCase()
+        }));
+        setData(dataWithFlagKey);
+      })
+      .catch(error => {
+        console.error('Error loading medal data:', error);
+        setData([]); // Set empty array on error
+      });
+  };
+
+  useEffect(() => {
+    // Initial fetch
+    fetchData();
+
+    // Set up interval for refreshing data
+    const interval = setInterval(() => {
+      fetchData();
+    }, refreshInterval);
+
+    // Cleanup interval on unmount
+    return () => clearInterval(interval);
+  }, [refreshInterval]);
 
   const calculateTotalMedals = (item: MedalData): number => item.gold + item.silver + item.bronze;
 

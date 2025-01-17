@@ -11,23 +11,8 @@ export interface MedalsWidgetProps {
 const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort = 'gold' }) => {
     const { data, toggleSort, sortField } = useMedalData();
 
-    const getFlagEmoji = (flagKey: string) => {
-        const flagMap: Record<string, string> = {
-            usa: '🇺🇸',
-            nor: '🇳🇴',
-            rus: '🇷🇺',
-            ned: '🇳🇱',
-            fra: '🇫🇷',
-            swe: '🇸🇪',
-            ita: '🇮🇹',
-            can: '🇨🇦',
-            sui: '🇨🇭',
-            blr: '🇧🇾',
-            ger: '🇩🇪',
-            aut: '🇦🇹',
-            chn: '🇨🇳'
-        };
-        return flagMap[flagKey] || '';
+    const getFlagUrl = (flagKey: string) => {
+        return `/assets/flags/${flagKey}.png`;
     };
 
     const widgetContent = (
@@ -99,7 +84,20 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                     <tbody>
                         {data.map((country, index) => (
                             <tr key={country.code}>
-                                <td>{index + 1}. {getFlagEmoji(country.flagKey)} {country.code}</td>
+                                <td>
+                                    {index + 1}. 
+                                    <img 
+                                        src={getFlagUrl(country.flagKey)} 
+                                        alt={`${country.code} flag`}
+                                        style={{
+                                            width: '20px',
+                                            height: '15px',
+                                            marginRight: '5px',
+                                            verticalAlign: 'middle'
+                                        }}
+                                    /> 
+                                    {country.code}
+                                </td>
                                 <td>{country.gold}</td>
                                 <td>{country.silver}</td>
                                 <td>{country.bronze}</td>

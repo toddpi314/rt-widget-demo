@@ -96,6 +96,10 @@ module.exports = {
       {
         directory: path.join(__dirname, '../widget-medals/dist/web-components'),
         publicPath: '/widget-medals/web-components'
+      },
+      {
+        directory: path.join(__dirname, 'public/assets'),
+        publicPath: '/assets'
       }
     ],
     port: 8080,
