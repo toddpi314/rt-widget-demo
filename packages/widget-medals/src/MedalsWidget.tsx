@@ -1,7 +1,11 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { SortField, useMedalData } from './hooks/useMedalData';
-import { useFlagData} from './hooks/useFlagData'
+import { useFlagData} from './hooks/useFlagData';
+import { MedalHeader } from './components/MedalHeader';
+import { MedalCell } from './components/MedalCell';
+import { CountryCell } from './components/CountryCell';
+import { commonHeaderStyle } from './components/styles';
 
 export interface MedalsWidgetProps {
     element_id: string;
@@ -36,75 +40,25 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                     borderCollapse: 'collapse' 
                 }}>
                     <colgroup>
-                        <col style={{ width: '40px' }} /> {/* Index column - fixed */}
-                        <col /> {/* Country column - flexible */}
-                        <col style={{ width: '45px' }} /> {/* Gold medal column - fixed */}
-                        <col style={{ width: '45px' }} /> {/* Silver medal column - fixed */}
-                        <col style={{ width: '45px' }} /> {/* Bronze medal column - fixed */}
-                        <col style={{ width: '60px' }} /> {/* Total column - fixed */}
+                        <col style={{ width: '40px' }} />
+                        <col />
+                        <col style={{ width: '45px' }} />
+                        <col style={{ width: '45px' }} />
+                        <col style={{ width: '45px' }} />
+                        <col style={{ width: '60px' }} />
                     </colgroup>
                     <thead>
                         <tr>
-                            <th style={{ color: '#666', height: '30px' }}></th>
-                            <th style={{ color: '#666', height: '30px' }}></th>
-                            <th 
-                                onClick={() => toggleSort('gold')}
-                                style={{
-                                    borderTop: sortField === 'gold' ? '2px solid #666' : 'none',
-                                    color: '#666',
-                                    whiteSpace: 'nowrap',
-                                    height: '30px'
-                                }}
-                            >
-                                <span style={{
-                                    display: 'inline-block',
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    backgroundColor: '#FFD700'
-                                }}/>
-                            </th>
-                            <th 
-                                onClick={() => toggleSort('silver')}
-                                style={{
-                                    borderTop: sortField === 'silver' ? '2px solid #666' : 'none',
-                                    color: '#666',
-                                    whiteSpace: 'nowrap',
-                                    height: '30px'
-                                }}
-                            >
-                                <span style={{
-                                    display: 'inline-block',
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    backgroundColor: '#C0C0C0'
-                                }}/>
-                            </th>
-                            <th 
-                                onClick={() => toggleSort('bronze')}
-                                style={{
-                                    borderTop: sortField === 'bronze' ? '2px solid #666' : 'none',
-                                    color: '#666',
-                                    whiteSpace: 'nowrap',
-                                    height: '30px'
-                                }}
-                            >
-                                <span style={{
-                                    display: 'inline-block',
-                                    width: '20px',
-                                    height: '20px',
-                                    borderRadius: '50%',
-                                    backgroundColor: '#CD7F32'
-                                }}/>
-                            </th>
+                            <th style={commonHeaderStyle}></th>
+                            <th style={commonHeaderStyle}></th>
+                            <MedalHeader type="gold" color="#FFD700" sortField={sortField} onSort={toggleSort} />
+                            <MedalHeader type="silver" color="#C0C0C0" sortField={sortField} onSort={toggleSort} />
+                            <MedalHeader type="bronze" color="#CD7F32" sortField={sortField} onSort={toggleSort} />
                             <th 
                                 onClick={() => toggleSort('total')}
                                 style={{
-                                    borderTop: sortField === 'total' ? '2px solid #666' : 'none',
-                                    whiteSpace: 'nowrap',
-                                    color: '#666',
-                                    height: '30px'
+                                    ...commonHeaderStyle,
+                                    borderTop: sortField === 'total' ? '2px solid #666' : 'none'
                                 }}
                             >
                                 Total
@@ -120,65 +74,12 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                                 height: '25px',
                                 borderBottom: '1px solid #ccc'
                             }}>
-                                <td style={{ 
-                                    textAlign: 'center', 
-                                    color: '#666', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}>{index + 1}</td>
-                                <td style={{ 
-                                    padding: '0 8px', 
-                                    whiteSpace: 'nowrap', 
-                                    color: '#666', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}>
-                                    <img 
-                                        src={getFlagAssetUrl(country.flagKey)} 
-                                        alt={`${country.code} flag`}
-                                        style={{
-                                            width: '24px',
-                                            height: '18px',
-                                            marginRight: '8px',
-                                            verticalAlign: 'middle',
-                                            display: 'inline-block'
-                                        }}
-                                    /> 
-                                    <span style={{ verticalAlign: 'middle' }}>{country.code}</span>
-                                </td>
-                                <td style={{ 
-                                    padding: '0 8px', 
-                                    textAlign: 'center', 
-                                    color: '#666', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}>{country.gold}</td>
-                                <td style={{ 
-                                    padding: '0 8px', 
-                                    textAlign: 'center', 
-                                    color: '#666', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}>{country.silver}</td>
-                                <td style={{ 
-                                    padding: '0 8px', 
-                                    textAlign: 'center', 
-                                    color: '#666', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}>{country.bronze}</td>
-                                <td style={{ 
-                                    padding: '0 8px', 
-                                    textAlign: 'center', 
-                                    verticalAlign: 'middle',
-                                    height: '25px',
-                                    lineHeight: '25px'
-                                }}><strong>{country.gold + country.silver + country.bronze}</strong></td>
+                                <MedalCell content={index + 1} additionalStyle={{ padding: 0 }} />
+                                <CountryCell code={country.code} flagUrl={getFlagAssetUrl(country.flagKey)} />
+                                <MedalCell content={country.gold} />
+                                <MedalCell content={country.silver} />
+                                <MedalCell content={country.bronze} />
+                                <MedalCell content={<strong>{country.gold + country.silver + country.bronze}</strong>} />
                             </tr>
                         ))}
                     </tbody>
