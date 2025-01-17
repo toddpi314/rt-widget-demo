@@ -38,13 +38,49 @@ class MedalsWidgetElement extends HTMLElement {
       style.id = styleId;
       style.textContent = `
         :host {
-          display: block;
+          display: block !important;
+          visibility: visible !important;
+          min-height: 100px !important;
+          height: auto !important;
+          opacity: 1 !important;
         }
-        .rt-widget-mount {
-          display: block;
+        .rt-widget {
+          display: block !important;
+          visibility: visible !important;
+          min-height: 100px !important;
+          height: auto !important;
+          opacity: 1 !important;
+          position: relative !important;
+          z-index: 1 !important;
+          border: 2px solid red;
+          padding: 15px;
+          margin: 10px;
+          border-radius: 4px;
+        }
+        .rt-widget-content {
+          display: block !important;
+          visibility: visible !important;
+          margin-top: 10px;
+          padding: 10px;
+          border: 1px solid #ccc;
+        }
+        .rt-widget-title {
+          font-size: 18px;
+          font-weight: bold;
+          margin: 0 0 10px 0;
         }
       `;
       this.shadowRoot!.appendChild(style);
+    }
+
+    if (this.mountPoint) {
+      this.mountPoint.style.cssText = `
+        display: block !important;
+        visibility: visible !important;
+        min-height: 100px !important;
+        height: auto !important;
+        opacity: 1 !important;
+      `;
     }
   }
 
