@@ -1,3 +1,12 @@
+/**
+ * Medal Widget Component
+ * 
+ * This component renders an Olympic-style medal count table showing countries' gold, silver,
+ * and bronze medal totals. It supports sorting by medal type and can be rendered either
+ * directly or via a portal to a specified DOM element.
+ * 
+ */
+
 import React from 'react';
 import { createPortal } from 'react-dom';
 import { SortField, useMedalData } from './hooks/useMedalData';
@@ -5,7 +14,7 @@ import { useFlagData} from './hooks/useFlagData';
 import { MedalHeader } from './components/MedalHeader';
 import { MedalCell } from './components/MedalCell';
 import { CountryCell } from './components/CountryCell';
-import { commonHeaderStyle } from './components/styles';
+import { commonHeaderStyle, totalStyle, colors } from './styles';
 
 export interface MedalsWidgetProps {
     element_id: string;
@@ -29,7 +38,7 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                     margin: '10px 0',
                     fontSize: '1.2em',
                     fontWeight: 'bold',
-                    color: '#666'
+                    color: colors.text
                 }}>
                     MEDAL COUNT
                 </h2>
@@ -51,14 +60,15 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                         <tr>
                             <th style={commonHeaderStyle}></th>
                             <th style={commonHeaderStyle}></th>
-                            <MedalHeader type="gold" color="#FFD700" sortField={sortField} onSort={toggleSort} />
-                            <MedalHeader type="silver" color="#C0C0C0" sortField={sortField} onSort={toggleSort} />
-                            <MedalHeader type="bronze" color="#CD7F32" sortField={sortField} onSort={toggleSort} />
+                            <MedalHeader type="gold" color={colors.gold} sortField={sortField} onSort={toggleSort} />
+                            <MedalHeader type="silver" color={colors.silver} sortField={sortField} onSort={toggleSort} />
+                            <MedalHeader type="bronze" color={colors.bronze} sortField={sortField} onSort={toggleSort} />
                             <th 
                                 onClick={() => toggleSort('total')}
                                 style={{
                                     ...commonHeaderStyle,
-                                    borderTop: sortField === 'total' ? '2px solid #666' : 'none'
+                                    ...totalStyle,
+                                    borderTop: sortField === 'total' ? `2px solid ${colors.textEmphasis}` : 'none'
                                 }}
                             >
                                 Total
@@ -66,20 +76,23 @@ const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort 
                         </tr>
                     </thead>
                     <tbody style={{ 
-                        borderTop: '3px solid #666',
+                        borderTop: `3px solid ${colors.text}`,
                         display: 'table-row-group' 
                     }}>
                         {data.map((country, index) => (
                             <tr key={country.code} style={{ 
                                 height: '25px',
-                                borderBottom: '1px solid #ccc'
+                                borderBottom: `1px solid ${colors.text}`
                             }}>
                                 <MedalCell content={index + 1} additionalStyle={{ padding: 0 }} />
                                 <CountryCell code={country.code} flagUrl={getFlagAssetUrl(country.flagKey)} />
                                 <MedalCell content={country.gold} />
                                 <MedalCell content={country.silver} />
                                 <MedalCell content={country.bronze} />
-                                <MedalCell content={<strong>{country.gold + country.silver + country.bronze}</strong>} />
+                                <MedalCell 
+                                    content={<strong>{country.gold + country.silver + country.bronze}</strong>}
+                                    additionalStyle={totalStyle}
+                                />
                             </tr>
                         ))}
                     </tbody>

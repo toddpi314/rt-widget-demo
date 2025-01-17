@@ -1,5 +1,5 @@
 import React from 'react';
-import { commonCellStyle } from './styles';
+import { commonCellStyle } from '../styles';
 
 interface CountryCellProps {
     code: string;

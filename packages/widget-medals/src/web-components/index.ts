@@ -1,3 +1,13 @@
+/**
+ * Medal Widget Web Component
+ * 
+ * This module provides a Web Component wrapper around the Medal Widget React component,
+ * allowing it to be used directly in HTML with custom element syntax. It handles all the
+ * necessary setup and lifecycle management for integrating a React component into a Web
+ * Component context.
+ * 
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MedalsWidget, { MedalsWidgetProps } from '../MedalsWidget';

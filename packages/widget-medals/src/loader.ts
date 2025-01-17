@@ -1,3 +1,12 @@
+/**
+ * Medal Widget Loader
+ * 
+ * This module provides a singleton loader class that handles the initialization and rendering
+ * of the Medals Widget in a web page. It manages the lifecycle of widget instances and handles
+ * asynchronous loading of dependencies.
+ * 
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MedalsWidget from './MedalsWidget';

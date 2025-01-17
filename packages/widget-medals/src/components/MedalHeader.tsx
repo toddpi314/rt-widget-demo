@@ -1,6 +1,6 @@
 import React from 'react';
 import { SortField } from '../hooks/useMedalData';
-import { commonHeaderStyle, medalCircleStyle } from './styles';
+import { commonHeaderStyle, medalCircleStyle, colors } from '../styles';
 
 interface MedalHeaderProps {
     type: SortField;
@@ -14,7 +14,7 @@ export const MedalHeader: React.FC<MedalHeaderProps> = ({ type, color, sortField
         onClick={() => onSort(type)}
         style={{
             ...commonHeaderStyle,
-            borderTop: sortField === type ? '2px solid #666' : 'none'
+            borderTop: sortField === type ? `2px solid ${colors.text}` : 'none'
         }}
     >
         <span style={{
