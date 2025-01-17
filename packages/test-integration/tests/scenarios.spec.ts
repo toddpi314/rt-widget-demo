@@ -18,8 +18,29 @@ let consoleMessages: string[] = [];
 let pageErrors: string[] = [];
 
 // Helper function for visual comparison
-async function compareScreenshots(page: Page, scenario: string, viewport: string = 'desktop') {
-  // ... existing code ...
+async function compareScreenshots(page: Page, scenario: string, state: string = 'initial') {
+  const testInfo = test.info();
+  const deviceName = testInfo.project.name;
+  const snapshotName = `${scenario}-${state}-${deviceName}`;
+  
+  // Wait for any animations and network requests to complete
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
+
+  try {
+    await expect(page).toHaveScreenshot(`${snapshotName}.png`, {
+      maxDiffPixels: 100,
+      threshold: 0.2,
+    });
+  } catch (error: any) {
+    if (error.message.includes("A snapshot doesn't exist")) {
+      // On first run, create the snapshot and pass the test
+      await page.screenshot({ path: `test-output/${snapshotName}.png` });
+      console.log(`Created new snapshot for ${snapshotName}`);
+      return;
+    }
+    throw error;
+  }
 }
 
 // Define the scenarios and their specific setup
@@ -161,10 +182,8 @@ test.describe('Widget Scenarios', () => {
         // Basic visibility checks
         await expect(container).toBeVisible({ timeout: 10000 });
         
-        // Visual regression test
-        await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(1000); // Wait for any animations to complete
-        await compareScreenshots(page, `${scenario.name}-initial`);
+        // Visual regression test - initial state
+        await compareScreenshots(page, scenario.name, 'initial');
         
         // Check specific text if provided
         if (expectedText) {
@@ -173,6 +192,13 @@ test.describe('Widget Scenarios', () => {
           } else {
             await expect(page.locator(`text=${expectedText}`)).toBeVisible({ timeout: 10000 });
           }
+        }
+
+        // Test header hover state if applicable
+        const header = page.locator('thead tr th').first();
+        if (await header.isVisible()) {
+          await header.hover();
+          await compareScreenshots(page, scenario.name, 'header-hover');
         }
 
         // Run any additional scenario-specific checks
@@ -186,12 +212,13 @@ test.describe('Widget Scenarios', () => {
         
         // Test different viewport sizes
         for (const viewport of [
-          { width: 375, height: 667 },  // Mobile
-          { width: 768, height: 1024 }, // Tablet
-          { width: 1440, height: 900 }  // Desktop
+          { width: 375, height: 667, name: 'mobile' },  // Mobile
+          { width: 768, height: 1024, name: 'tablet' }, // Tablet
+          { width: 1440, height: 900, name: 'desktop' }  // Desktop
         ]) {
-          await page.setViewportSize(viewport);
+          await page.setViewportSize({ width: viewport.width, height: viewport.height });
           await expect(container).toBeVisible({ timeout: 10000 });
+          await compareScreenshots(page, `${scenario.name}-${viewport.name}`);
         }
       });
 

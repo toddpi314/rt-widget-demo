@@ -1,5 +1,6 @@
 import { PlaywrightTestConfig, devices } from '@playwright/test';
 import type { Reporter } from '@playwright/test/reporter';
+import os from 'os';
 
 const config: PlaywrightTestConfig = {
   testDir: './tests',
@@ -13,13 +14,18 @@ const config: PlaywrightTestConfig = {
   },
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 4 : undefined,
+  workers: process.env.CI ? Math.max(os.cpus().length - 1, 1) : Math.floor(os.cpus().length / 2),
   fullyParallel: true,
   use: {
     actionTimeout: 0,
     baseURL: 'http://localhost:8080',
     trace: 'on-first-retry',
-    screenshot: 'only-on-failure',
+    screenshot: {
+      mode: 'on',
+      fullPage: false,
+    },
+    viewport: { width: 1280, height: 720 },
+    deviceScaleFactor: 1,
     video: 'retain-on-failure',
   },
   outputDir: 'test-output/',
@@ -186,4 +192,4 @@ const config: PlaywrightTestConfig = {
   ],
 };
 
-export default config; 
+export default config;
