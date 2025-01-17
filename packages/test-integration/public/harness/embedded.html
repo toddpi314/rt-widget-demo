@@ -1,30 +1,37 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Embedded Widget Test</title>
+    <meta charset="utf-8" />
+    <title>Widget Medals - Embedded Test</title>
     <style>
-        #widget-container {
-            display: block;
-            min-height: 100px;
-            margin: 20px;
-            padding: 20px;
-        }
-        .app-container {
-            border: 1px solid #ccc;
-            padding: 20px;
+        #rt-widget-target {
             display: block !important;
             visibility: visible !important;
             min-height: 100px !important;
+            height: auto !important;
+            opacity: 1 !important;
         }
-        .rt-widget {
-            display: block;
+        .app-container {
+            padding: 20px;
+            border: 1px solid #ccc;
+            margin: 20px;
         }
     </style>
 </head>
 <body>
     <div class="app-container">
-        <h1>Embedded Widget Implementation</h1>
-        <div id="widget-container"></div>
+        <h1>Embedded Widget Test</h1>
+        <div id="rt-widget-target"></div>
     </div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="/widget-medals/loader.js"></script>
+    <script>
+        rtWidgetMedals('init', {
+            element_id: 'rt-widget-target',
+            title: 'Embedded Widget',
+            content: 'Testing embedded implementation'
+        });
+    </script>
 </body>
 </html> 

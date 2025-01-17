@@ -29,7 +29,10 @@ const scenarios: Scenario[] = [
     url: 'http://localhost:8080/basic.html',
     setup: async ({ page }) => {
       await page.goto('http://localhost:8080/basic.html');
-      return { container: page.locator('#widget-container') };
+      return { 
+        container: page.locator('#rt-widget-target'),
+        expectedText: 'Testing basic implementation'
+      };
     }
   },
   {
@@ -38,7 +41,10 @@ const scenarios: Scenario[] = [
     setup: async ({ page }) => {
       await page.goto('http://localhost:8080/embedded.html');
       await expect(page.locator('.app-container')).toBeVisible();
-      return { container: page.locator('#widget-container') };
+      return { 
+        container: page.locator('#rt-widget-target'),
+        expectedText: 'Testing embedded implementation'
+      };
     }
   },
   {
@@ -47,7 +53,8 @@ const scenarios: Scenario[] = [
     setup: async ({ page }) => {
       await page.goto('http://localhost:8080/cdn.html');
       return { 
-        container: page.locator('#widget-container'),
+        container: page.locator('#rt-widget-target'),
+        expectedText: 'Testing CDN implementation',
         additionalChecks: async () => {
           const hasGlobalObject = await page.evaluate(() => {
             return typeof (window as any).RTWidgetMedals !== 'undefined';
@@ -67,7 +74,7 @@ const scenarios: Scenario[] = [
       await page.goto('http://localhost:8080/script-embed.html');
       await expect(page.locator('script[src*="loader.js"]')).toBeAttached({ timeout: 10000 });
       return { 
-        container: page.locator('#widget-container'),
+        container: page.locator('#rt-widget-target'),
         expectedText: 'Testing script-based embedding'
       };
     }
@@ -82,9 +89,9 @@ const scenarios: Scenario[] = [
       await page.goto('http://localhost:8080/iframe-embed.html');
       await expect(page.locator('#widget-frame')).toBeAttached({ timeout: 10000 });
       const frame = page.frameLocator('#widget-frame');
-      await expect(frame.locator('#widget-container')).toBeVisible({ timeout: 10000 });
+      await expect(frame.locator('#rt-widget-target')).toBeVisible({ timeout: 10000 });
       return { 
-        container: frame.locator('#widget-container'),
+        container: frame.locator('#rt-widget-target'),
         expectedText: 'IFrame embedded content',
         textLocator: frame.locator('text=IFrame embedded content')
       };
@@ -120,7 +127,7 @@ const scenarios: Scenario[] = [
       await page.goto('http://localhost:8080/federation.html');
       await expect(page.locator('script[src*="remoteEntry.js"]')).toBeAttached({ timeout: 10000 });
       return { 
-        container: page.locator('#widget-container'),
+        container: page.locator('#rt-widget-target'),
         expectedText: 'Testing Module Federation'
       };
     }

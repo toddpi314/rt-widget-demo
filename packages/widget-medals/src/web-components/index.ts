@@ -8,7 +8,7 @@ class MedalsWidgetElement extends HTMLElement {
   private observer: MutationObserver | null = null;
 
   static get observedAttributes() {
-    return ['title'];
+    return ['title', 'element_id'];
   }
 
   private async waitForDependencies() {
@@ -154,6 +154,7 @@ class MedalsWidgetElement extends HTMLElement {
     }
 
     const title = this.getAttribute('title') || 'Medals Widget';
+    const element_id = this.getAttribute('element_id');
     const content = this.getChildContent();
     console.log('Rendering with content:', content);
 
@@ -161,6 +162,7 @@ class MedalsWidgetElement extends HTMLElement {
     this.root.render(
       (window as any).React.createElement(MedalsWidget, {
         title,
+        element_id: element_id || 'medals-widget',
         children: (window as any).React.createElement('div', {
           className: 'rt-widget-content',
           'data-testid': 'rt-widget-content',

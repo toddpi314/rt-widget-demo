@@ -3,13 +3,22 @@
   <head>
     <meta charset="utf-8" />
     <title>Widget Medals - Web Component Test</title>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="/widget-medals/web-components/index.js"></script>
+    <style>
+        #rt-widget-target {
+            display: block !important;
+            visibility: visible !important;
+            min-height: 100px !important;
+            height: auto !important;
+            opacity: 1 !important;
+        }
+    </style>
   </head>
   <body>
-    <medals-widget title="Web Component Widget">
-      <div>Testing Web Component integration</div>
+    <medals-widget id="rt-widget-target" title="Web Component Widget">
+      Testing Web Component integration
     </medals-widget>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="/widget-medals/web-components/index.js"></script>
   </body>
 </html> 

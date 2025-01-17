@@ -131,7 +131,7 @@ const configs = {
     federation: {
         ...commonConfig,
         name: 'federation',
-        entry: './src/bootstrap.tsx',
+        entry: './src/loader.ts',
         output: {
             path: path.resolve(__dirname, 'dist/federation'),
             publicPath: '/widget-medals/federation/',
@@ -145,18 +145,20 @@ const configs = {
                 name: 'medals_widget',
                 filename: 'remoteEntry.js',
                 exposes: {
-                    './Widget': './src/bootstrap.tsx'
+                    './Widget': './src/loader.ts'
                 },
                 shared: {
                     react: {
                         singleton: true,
                         requiredVersion: false,
-                        eager: true
+                        eager: true,
+                        requiredVersion: '^18.0.0'
                     },
                     'react-dom': {
                         singleton: true,
                         requiredVersion: false,
-                        eager: true
+                        eager: true,
+                        requiredVersion: '^18.0.0'
                     }
                 }
             })

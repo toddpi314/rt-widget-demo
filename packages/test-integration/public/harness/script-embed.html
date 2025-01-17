@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>Widget Medals - Script Embed Test</title>
     <style>
-      #widget-container {
+      #rt-widget-target {
         display: block !important;
         visibility: visible !important;
         min-height: 100px !important;
@@ -14,7 +14,7 @@
     </style>
   </head>
   <body>
-    <div id="widget-container"></div>
+    <div id="rt-widget-target"></div>
     <script>
       // Set up the command queue
       window.rtWidgetMedals = window.rtWidgetMedals || function() {
@@ -24,7 +24,7 @@
 
       // Queue the init command
       rtWidgetMedals('init', {
-        container: 'widget-container',
+        element_id: 'rt-widget-target',
         title: 'Script Embed Widget',
         content: 'Testing script-based embedding'
       });

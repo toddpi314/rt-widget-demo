@@ -29,33 +29,6 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
-  devServer: {
-    static: [
-      {
-        directory: path.join(__dirname, 'public'),
-      },
-      {
-        directory: path.join(__dirname, '../widget-medals/dist'),
-        publicPath: '/widget-medals'
-      },
-      {
-        directory: path.join(__dirname, '../widget-medals/dist/web-components'),
-        publicPath: '/widget-medals/web-components'
-      },
-      {
-        directory: path.join(__dirname, '../widget-medals/dist/federation'),
-        publicPath: '/widget-medals/federation'
-      }
-    ],
-    port: 8080,
-    hot: true,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
-      "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline';"
-    }
-  },
   plugins: [
     // Static pages
     new HtmlWebpackPlugin({
@@ -111,4 +84,27 @@ module.exports = {
       },
     }),
   ],
+  devServer: {
+    static: [
+      {
+        directory: path.join(__dirname, 'public'),
+      },
+      {
+        directory: path.join(__dirname, '../widget-medals/dist'),
+        publicPath: '/widget-medals'
+      },
+      {
+        directory: path.join(__dirname, '../widget-medals/dist/web-components'),
+        publicPath: '/widget-medals/web-components'
+      }
+    ],
+    port: 8080,
+    hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
+      "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline';"
+    }
+  }
 }; 

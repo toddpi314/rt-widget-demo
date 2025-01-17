@@ -2,26 +2,31 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Widget Medals - CDN Style Test</title>
-    <!-- Load React and ReactDOM from CDN -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <!-- Load our widget bundle -->
-    <script src="/widget-medals/index.js"></script>
+    <title>Widget Medals - CDN Test</title>
+    <style>
+        #rt-widget-target {
+            display: block !important;
+            visibility: visible !important;
+            min-height: 100px !important;
+            height: auto !important;
+            opacity: 1 !important;
+        }
+    </style>
   </head>
   <body>
-    <div id="widget-container"></div>
+    <div id="rt-widget-target"></div>
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="/widget-medals/index.js"></script>
     <script>
-      // Use the global RTWidgetMedals object
-      const container = document.getElementById('widget-container');
-      const root = ReactDOM.createRoot(container);
-      const MedalsWidget = RTWidgetMedals.MedalsWidget;
-      
-      root.render(
-        React.createElement(MedalsWidget, { title: "CDN Style Widget" },
-          React.createElement('div', null, "Testing CDN-style loading")
-        )
-      );
+        const root = ReactDOM.createRoot(document.getElementById('rt-widget-target'));
+        root.render(
+            React.createElement(RTWidgetMedals.MedalsWidget, {
+                element_id: 'rt-widget-target',
+                title: 'CDN Widget',
+                children: 'Testing CDN implementation'
+            })
+        );
     </script>
   </body>
 </html> 

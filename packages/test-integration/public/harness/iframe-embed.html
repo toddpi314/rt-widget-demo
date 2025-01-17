@@ -2,21 +2,23 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Widget Medals - IFrame Embed Test</title>
+    <title>Widget Medals - IFrame Test</title>
     <style>
+      #rt-widget-target {
+        display: block !important;
+        visibility: visible !important;
+        min-height: 100px !important;
+        height: auto !important;
+        opacity: 1 !important;
+      }
       #widget-frame {
         width: 100%;
-        height: 400px;
+        height: 300px;
         border: none;
       }
     </style>
   </head>
   <body>
-    <iframe
-      id="widget-frame"
-      src="/widget-medals/iframe.html?title=IFrame%20Embed%20Widget"
-      title="Medals Widget"
-      allow="fullscreen"
-    ></iframe>
+    <iframe id="widget-frame" src="/harness/iframe.html"></iframe>
   </body>
 </html> 

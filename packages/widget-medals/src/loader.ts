@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import MedalsWidget from './MedalsWidget';
+import { logger } from './utils/logger';
 
 interface WidgetConfig {
-  container: string;
+  element_id: string;
   title: string;
   content?: string;
 }
@@ -22,39 +23,39 @@ class WidgetLoader {
   }
 
   constructor() {
-    console.log('WidgetLoader constructor called');
+    logger.log('WidgetLoader constructor called');
     // Get the existing queue before we override the global function
     const existingQueue = (window as any).rtWidgetMedals?.q || [];
-    console.log('Existing queue at constructor:', existingQueue);
+    logger.log('Existing queue at constructor:', existingQueue);
     
     // Store the queue for processing
     this.queue = [...existingQueue];
     
     // Set up the global function immediately
     (window as any).rtWidgetMedals = (command: string, args: WidgetConfig) => {
-      console.log('Global rtWidgetMedals called with:', command, args);
+      logger.log('Global rtWidgetMedals called with:', command, args);
       this.push(command, args);
     };
 
     // Process queue when React is ready
     this.waitForDependencies().then(() => {
-      console.log('Dependencies ready, processing queue');
+      logger.log('Dependencies ready, processing queue');
       this.processQueue();
     });
   }
 
   private async waitForDependencies(): Promise<void> {
-    console.log('Checking for React and ReactDOM...');
+    logger.log('Checking for React and ReactDOM...');
     if (window.React && window.ReactDOM) {
-      console.log('React and ReactDOM already available');
+      logger.log('React and ReactDOM already available');
       return;
     }
 
-    console.log('Waiting for React and ReactDOM...');
+    logger.log('Waiting for React and ReactDOM...');
     return new Promise<void>((resolve) => {
       const checkDeps = () => {
         if (window.React && window.ReactDOM) {
-          console.log('React and ReactDOM now available');
+          logger.log('React and ReactDOM now available');
           resolve();
         } else {
           setTimeout(checkDeps, 100);
@@ -65,142 +66,66 @@ class WidgetLoader {
   }
 
   private ensureContainerVisible(container: HTMLElement) {
-    console.log('Ensuring container visibility for:', container);
-    // Add a style tag to ensure visibility
-    const styleId = 'rt-widget-medals-styles';
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
-      style.id = styleId;
-      style.textContent = `
-        .rt-widget-medals-container {
-          display: block !important;
-          visibility: visible !important;
-          min-height: 100px !important;
-          height: auto !important;
-          opacity: 1 !important;
-          position: relative !important;
-          z-index: 1 !important;
-        }
-      `;
-      document.head.appendChild(style);
-      console.log('Added visibility styles');
-    }
-
-    // Add our class and inline styles
-    container.classList.add('rt-widget-medals-container');
-    container.style.cssText = `
-      display: block !important;
-      visibility: visible !important;
-      min-height: 100px !important;
-      height: auto !important;
-      opacity: 1 !important;
-      position: relative !important;
-      z-index: 1 !important;
-    `;
-
+    logger.log('Ensuring container visibility for:', container);
     // Create a wrapper div for the content
     const wrapper = document.createElement('div');
-    wrapper.className = 'rt-widget-medals-container';
-    wrapper.style.cssText = `
-      display: block !important;
-      visibility: visible !important;
-      min-height: 100px !important;
-      height: auto !important;
-      opacity: 1 !important;
-      position: relative !important;
-      z-index: 1 !important;
-    `;
     
     // Move container's children to wrapper
     while (container.firstChild) {
       wrapper.appendChild(container.firstChild);
     }
     container.appendChild(wrapper);
-
-    // Ensure parent containers are visible
-    let element: HTMLElement | null = container.parentElement;
-    while (element) {
-      element.style.cssText = `
-        display: block !important;
-        visibility: visible !important;
-        min-height: 100px !important;
-        height: auto !important;
-        opacity: 1 !important;
-      `;
-      element = element.parentElement;
-    }
   }
 
   public async init(config: WidgetConfig) {
-    console.log('Init called with config:', config);
-    const container = document.getElementById(config.container);
-    if (!container) {
-      console.error(`Container #${config.container} not found`);
+    logger.log('Init called with config:', config);
+    const targetElement = document.getElementById(config.element_id);
+    if (!targetElement) {
+      logger.error(`Target element #${config.element_id} not found`);
       return;
     }
 
     try {
       await this.waitForDependencies();
-      console.log('Creating root for container:', config.container);
-      this.ensureContainerVisible(container);
+      logger.log('Creating root for element:', config.element_id);
+      this.ensureContainerVisible(targetElement);
 
       // Clean up existing root if it exists
-      const existingRoot = this.roots.get(config.container);
+      const existingRoot = this.roots.get(config.element_id);
       if (existingRoot) {
-        console.log('Unmounting existing root');
+        logger.log('Unmounting existing root');
         existingRoot.unmount();
       }
 
-      const root = (window as any).ReactDOM.createRoot(container);
-      this.roots.set(config.container, root);
+      const root = (window as any).ReactDOM.createRoot(targetElement);
+      this.roots.set(config.element_id, root);
 
-      console.log('Rendering widget with config:', config);
+      logger.log('Rendering widget with config:', config);
       root.render(
-        (window as any).React.createElement(
-          'div',
-          { 
-            className: 'rt-widget-medals-container',
-            style: {
-              display: 'block',
-              visibility: 'visible',
-              minHeight: '100px',
-              position: 'relative',
-              zIndex: 1
-            }
-          },
-          (window as any).React.createElement(MedalsWidget, { title: config.title },
-            (window as any).React.createElement('div', {
-              className: 'rt-widget-medals-container',
-              style: {
-                display: 'block',
-                visibility: 'visible',
-                minHeight: '100px',
-                position: 'relative',
-                zIndex: 1
-              }
-            }, config.content)
-          )
-        )
+        (window as any).React.createElement(MedalsWidget, { 
+          title: config.title,
+          element_id: config.element_id,
+        }, config.content)
       );
       this.initialized = true;
-      console.log('Widget rendered successfully');
+      logger.log('Widget rendered successfully');
     } catch (error) {
-      console.error('Error rendering widget:', error);
-      console.error('Error details:', {
+      logger.error('Error rendering widget:', error);
+      logger.error('Error details:', {
         error,
         React: !!window.React,
         ReactDOM: !!window.ReactDOM,
-        container: !!container,
+        targetElement: !!targetElement,
         config
       });
     }
   }
 
   private async processQueue() {
-    console.log('Processing queue:', this.queue);
+    logger.log('Processing queue:', this.queue);
     while (this.queue.length > 0) {
       const [command, args] = this.queue.shift()!;
-      console.log('Processing command from queue:', command, args);
+      logger.log('Processing command from queue:', command, args);
       if (command === 'init') {
         await this.init(args);
       }
@@ -208,14 +133,14 @@ class WidgetLoader {
   }
 
   public async push(command: string, args: WidgetConfig) {
-    console.log('Push called with:', command, args);
+    logger.log('Push called with:', command, args);
     if (this.initialized && window.React && window.ReactDOM) {
-      console.log('Already initialized, executing command directly');
+      logger.log('Already initialized, executing command directly');
       if (command === 'init') {
         await this.init(args);
       }
     } else {
-      console.log('Not initialized or missing dependencies, queueing command');
+      logger.log('Not initialized or missing dependencies, queueing command');
       this.queue.push([command, args]);
       if (!this.initialized) {
         await this.waitForDependencies();
@@ -230,6 +155,6 @@ const loader = WidgetLoader.getInstance();
 
 // Export the loader function
 export default function(command: string, args: WidgetConfig) {
-  console.log('Loader function called with:', command, args);
+  logger.log('Loader function called with:', command, args);
   loader.push(command, args);
 } 
