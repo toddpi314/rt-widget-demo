@@ -23,14 +23,15 @@ export interface MedalsWidgetProps {
 }
 
 const MedalsWidget: React.FC<MedalsWidgetProps> = ({ element_id, children, sort = 'gold' }) => {
-    const { data, toggleSort, sortField } = useMedalData();
+    const { data, toggleSort, sortField, sortOrder } = useMedalData({ initialSort: sort });
     const { getFlagAssetUrl } = useFlagData();
 
     const widgetContent = (
         <div 
             className="rt-widget" 
             data-testid="rt-widget" 
-            data-sort={sort}
+            data-sort={sortField}
+            data-sort-order={sortOrder}
         >
             <div className="rt-widget-content">
                 <h2 style={{ 

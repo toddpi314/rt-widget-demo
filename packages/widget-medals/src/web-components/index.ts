@@ -63,7 +63,6 @@ class MedalsWidgetElement extends HTMLElement {
           opacity: 1 !important;
           position: relative !important;
           z-index: 1 !important;
-          border: 2px solid red;
           padding: 15px;
           margin: 10px;
           border-radius: 4px;
@@ -73,12 +72,54 @@ class MedalsWidgetElement extends HTMLElement {
           visibility: visible !important;
           margin-top: 10px;
           padding: 10px;
-          border: 1px solid #ccc;
         }
         .rt-widget-title {
           font-size: 18px;
           font-weight: bold;
           margin: 0 0 10px 0;
+        }
+        table {
+          width: 100%;
+          border-collapse: collapse;
+          margin-top: 10px;
+          display: table !important;
+          visibility: visible !important;
+        }
+        thead {
+          display: table-header-group !important;
+          visibility: visible !important;
+        }
+        tbody {
+          display: table-row-group !important;
+          visibility: visible !important;
+        }
+        tr {
+          display: table-row !important;
+          visibility: visible !important;
+        }
+        th, td {
+          padding: 8px;
+          text-align: left;
+          border-bottom: 1px solid #ddd;
+          display: table-cell !important;
+          visibility: visible !important;
+        }
+        th {
+          font-weight: bold;
+          cursor: pointer;
+        }
+        th:hover {
+          background-color: #f5f5f5;
+        }
+        tbody tr:hover {
+          background-color: #f5f5f5;
+        }
+        .rt-widget-wrapper {
+          display: block !important;
+          visibility: visible !important;
+          min-height: 100px !important;
+          height: auto !important;
+          opacity: 1 !important;
         }
       `;
       this.shadowRoot!.appendChild(style);
@@ -145,7 +186,10 @@ class MedalsWidgetElement extends HTMLElement {
     });
 
     this.ensureVisible();
-    this.render();
+    await this.render();
+    
+    // Wait for initial render to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 
   disconnectedCallback() {
@@ -162,7 +206,7 @@ class MedalsWidgetElement extends HTMLElement {
     this.render();
   }
 
-  private render() {
+  private async render() {
     if (!this.root) {
       logger.log('No root available for rendering');
       return;
@@ -182,13 +226,24 @@ class MedalsWidgetElement extends HTMLElement {
       children: React.createElement('div', {
         className: 'rt-widget-content',
         'data-testid': 'rt-widget-content',
+        'data-sort-order': this.getAttribute('sort-order') || 'desc',
         dangerouslySetInnerHTML: { __html: content }
       })
     };
 
+    // Ensure the mount point is empty
+    if (this.mountPoint) {
+      while (this.mountPoint.firstChild) {
+        this.mountPoint.removeChild(this.mountPoint.firstChild);
+      }
+    }
+
     this.root.render(
       React.createElement(MedalsWidget, props)
     );
+
+    // Wait for render to complete
+    await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
 

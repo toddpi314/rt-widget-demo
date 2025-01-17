@@ -171,6 +171,14 @@ describe('MedalsWidget', () => {
     });
 
     it('renders with custom sort prop', () => {
+        // Mock useMedalData to return the custom sort field
+        (useMedalData as jest.Mock).mockReturnValue({
+            data: mockMedalData.slice(0, 10),
+            toggleSort: jest.fn(),
+            sortField: 'total',
+            sortOrder: 'desc'
+        });
+
         render(<MedalsWidget element_id="test-widget" sort="total" />);
         
         // Verify the sort attribute is set

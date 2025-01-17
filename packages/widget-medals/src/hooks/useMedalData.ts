@@ -14,11 +14,12 @@ type SortOrder = "asc" | "desc";
 
 interface UseMedalDataOptions {
   refreshInterval?: number;
+  initialSort?: SortField;
 }
 
-export const useMedalData = ({ refreshInterval = 10000 }: UseMedalDataOptions = {}) => {
+export const useMedalData = ({ refreshInterval = 10000, initialSort = 'gold' }: UseMedalDataOptions = {}) => {
   const [data, setData] = useState<MedalData[]>([]);
-  const [sortField, setSortField] = useState<SortField>("total");
+  const [sortField, setSortField] = useState<SortField>(initialSort);
   const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
 
   const fetchData = () => {
@@ -63,7 +64,8 @@ export const useMedalData = ({ refreshInterval = 10000 }: UseMedalDataOptions = 
           return sortOrder === "asc" ? b.gold - a.gold : a.gold - b.gold; // Tie-breaker
         } else if (sortField === "gold") {
           if (a.gold !== b.gold) return sortOrder === "asc" ? a.gold - b.gold : b.gold - a.gold;
-          return sortOrder === "asc" ? b.silver - a.silver : a.silver - b.silver; // Tie-breaker
+          if (a.silver !== b.silver) return sortOrder === "asc" ? a.silver - b.silver : b.silver - a.silver; // Tie-breaker
+          return sortOrder === "asc" ? a.bronze - b.bronze : b.bronze - a.bronze; // Second tie-breaker
         } else if (sortField === "silver") {
           if (a.silver !== b.silver) return sortOrder === "asc" ? a.silver - b.silver : b.silver - a.silver;
           return sortOrder === "asc" ? b.gold - a.gold : a.gold - b.gold; // Tie-breaker
