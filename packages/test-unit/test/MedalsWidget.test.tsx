@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import type { RTWidgetMedalsProps } from '@rt/widget-medals';
+import { MedalsWidgetProps } from '../../widget-medals/src/MedalsWidget';
 
 const RTWidgetMedals = (props: MedalsWidgetProps) => <div data-testid="rt-widget">{props.title && <h1>{props.title}</h1>}{props.children}</div>;
 
