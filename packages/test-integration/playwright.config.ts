@@ -34,6 +34,47 @@ const config: PlaywrightTestConfig = {
       ]
     : 'list',
   projects: [
+    // Responsive Testing Projects
+    {
+      name: 'responsive-mobile-portrait',
+      use: {
+        ...devices['Pixel 5'],
+        viewport: { width: 360, height: 640 },
+        deviceScaleFactor: 2,
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+    {
+      name: 'responsive-desktop-fhd',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1920, height: 1080 },
+        deviceScaleFactor: 1,
+        isMobile: false,
+        hasTouch: false,
+      },
+    },
+    {
+      name: 'responsive-mobile-plus',
+      use: {
+        ...devices['iPhone 12 Pro Max'],
+        viewport: { width: 414, height: 896 },
+        deviceScaleFactor: 3,
+        isMobile: true,
+        hasTouch: true,
+      },
+    },
+    {
+      name: 'responsive-laptop',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1366, height: 768 },
+        deviceScaleFactor: 1,
+        isMobile: false,
+        hasTouch: false,
+      },
+    },
     // Latest Stable Versions
     {
       name: 'chromium-latest',
