@@ -150,13 +150,11 @@ const configs = {
                 shared: {
                     react: {
                         singleton: true,
-                        requiredVersion: false,
                         eager: true,
                         requiredVersion: '^18.0.0'
                     },
                     'react-dom': {
                         singleton: true,
-                        requiredVersion: false,
                         eager: true,
                         requiredVersion: '^18.0.0'
                     }
@@ -170,11 +168,31 @@ const configs = {
         entry: './src/web-components/index.ts',
         output: {
             path: path.resolve(__dirname, 'dist/web-components'),
-            filename: 'index.js'
+            filename: 'index.js',
+            publicPath: '/widget-medals/web-components/'
         },
         plugins: [
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development')
+            }),
+            new ModuleFederationPlugin({
+                name: 'medals_widget_webcomponent',
+                filename: 'remoteEntry.js',
+                exposes: {
+                    './WebComponent': './src/web-components/index.ts'
+                },
+                shared: {
+                    react: {
+                        singleton: true,
+                        eager: true,
+                        requiredVersion: '^18.0.0'
+                    },
+                    'react-dom': {
+                        singleton: true,
+                        eager: true,
+                        requiredVersion: '^18.0.0'
+                    }
+                }
             })
         ]
     }

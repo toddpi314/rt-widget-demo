@@ -46,23 +46,9 @@ class WidgetLoader {
 
   private async waitForDependencies(): Promise<void> {
     logger.log('Checking for React and ReactDOM...');
-    if (window.React && window.ReactDOM) {
-      logger.log('React and ReactDOM already available');
-      return;
-    }
-
-    logger.log('Waiting for React and ReactDOM...');
-    return new Promise<void>((resolve) => {
-      const checkDeps = () => {
-        if (window.React && window.ReactDOM) {
-          logger.log('React and ReactDOM now available');
-          resolve();
-        } else {
-          setTimeout(checkDeps, 100);
-        }
-      };
-      checkDeps();
-    });
+    // Always resolve immediately since we're using imports
+    logger.log('Using imported React and ReactDOM');
+    return Promise.resolve();
   }
 
   private ensureContainerVisible(container: HTMLElement) {
@@ -97,13 +83,12 @@ class WidgetLoader {
         existingRoot.unmount();
       }
 
-      const root = (window as any).ReactDOM.createRoot(targetElement);
+      const root = ReactDOM.createRoot(targetElement);
       this.roots.set(config.element_id, root);
 
       logger.log('Rendering widget with config:', config);
       root.render(
-        (window as any).React.createElement(MedalsWidget, { 
-          title: config.title,
+        React.createElement(MedalsWidget, { 
           element_id: config.element_id,
         }, config.content)
       );
@@ -113,8 +98,8 @@ class WidgetLoader {
       logger.error('Error rendering widget:', error);
       logger.error('Error details:', {
         error,
-        React: !!window.React,
-        ReactDOM: !!window.ReactDOM,
+        React: !!React,
+        ReactDOM: !!ReactDOM,
         targetElement: !!targetElement,
         config
       });

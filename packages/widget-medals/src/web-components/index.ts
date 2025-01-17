@@ -1,9 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import MedalsWidget from '../MedalsWidget';
+import MedalsWidget, { MedalsWidgetProps } from '../MedalsWidget';
+
+// Initialize React in the window context
+(window as any).React = React;
+(window as any).ReactDOM = ReactDOM;
 
 class MedalsWidgetElement extends HTMLElement {
-  private root: ReactDOM.Root | null = null;
+  private root: any = null;
   private mountPoint: HTMLDivElement | null = null;
   private observer: MutationObserver | null = null;
 
@@ -13,14 +17,14 @@ class MedalsWidgetElement extends HTMLElement {
 
   private async waitForDependencies() {
     console.log('Waiting for React and ReactDOM...');
-    await new Promise<void>((resolve) => {
+    return new Promise<void>((resolve) => {
       const checkDeps = () => {
-        if ((window as any).React && (window as any).ReactDOM) {
-          console.log('React and ReactDOM available');
+        if ((window as any).React?.useState && (window as any).ReactDOM?.createRoot) {
+          console.log('React and ReactDOM available with required features');
           resolve();
-        } else {
-          setTimeout(checkDeps, 100);
+          return;
         }
+        setTimeout(checkDeps, 100);
       };
       checkDeps();
     });
@@ -107,16 +111,16 @@ class MedalsWidgetElement extends HTMLElement {
   async connectedCallback() {
     console.log('Web component connected');
     
-    // Wait for React and ReactDOM to be available
-    await this.waitForDependencies();
-    
     this.mountPoint = document.createElement('div');
     this.mountPoint.setAttribute('data-testid', 'rt-widget-mount');
     
     const shadow = this.attachShadow({ mode: 'open' });
     shadow.appendChild(this.mountPoint);
 
-    // Set up mutation observer to watch for changes to children
+    await this.waitForDependencies();
+    
+    this.root = ReactDOM.createRoot(this.mountPoint);
+
     this.observer = new MutationObserver(() => {
       console.log('Content changed, re-rendering');
       this.render();
@@ -129,7 +133,6 @@ class MedalsWidgetElement extends HTMLElement {
     });
 
     this.ensureVisible();
-    this.root = (window as any).ReactDOM.createRoot(this.mountPoint);
     this.render();
   }
 
@@ -159,16 +162,18 @@ class MedalsWidgetElement extends HTMLElement {
     console.log('Rendering with content:', content);
 
     this.ensureVisible();
-    this.root.render(
-      (window as any).React.createElement(MedalsWidget, {
-        title,
-        element_id: element_id || 'medals-widget',
-        children: (window as any).React.createElement('div', {
-          className: 'rt-widget-content',
-          'data-testid': 'rt-widget-content',
-          dangerouslySetInnerHTML: { __html: content }
-        })
+    
+    const props: MedalsWidgetProps = {
+      element_id: element_id || 'medals-widget',
+      children: React.createElement('div', {
+        className: 'rt-widget-content',
+        'data-testid': 'rt-widget-content',
+        dangerouslySetInnerHTML: { __html: content }
       })
+    };
+
+    this.root.render(
+      React.createElement(MedalsWidget, props)
     );
   }
 }
