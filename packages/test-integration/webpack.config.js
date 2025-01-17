@@ -43,9 +43,15 @@ module.exports = {
     extensions: ['.js', '.jsx', '.ts', '.tsx']
   },
   devServer: {
-    static: {
-      directory: path.join(__dirname, 'public'),
-    },
+    static: [
+      {
+        directory: path.join(__dirname, 'public'),
+      },
+      {
+        directory: path.join(__dirname, '../widget-medals/dist'),
+        publicPath: '/widget-medals'
+      }
+    ],
     port: 8080,
     hot: true,
   },
@@ -59,13 +65,19 @@ module.exports = {
         chunks: [name],
       });
     }),
+    // CDN-style page (no webpack bundle)
+    new HtmlWebpackPlugin({
+      template: './public/harness/cdn.html',
+      filename: 'cdn.html',
+      inject: false,
+    }),
     // Index page listing all scenarios
     new HtmlWebpackPlugin({
       template: './public/harness/index.html',
       filename: 'index.html',
       inject: false,
       templateParameters: {
-        scenarios: scenarioFiles.map(f => f.replace('.js', '')),
+        scenarios: [...scenarioFiles.map(f => f.replace('.js', '')), 'cdn'],
       },
     }),
   ],

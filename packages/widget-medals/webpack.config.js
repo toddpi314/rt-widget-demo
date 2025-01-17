@@ -6,15 +6,25 @@ module.exports = {
         path: path.resolve(__dirname, 'dist'),
         filename: 'index.js',
         library: {
-            type: 'module'
-        }
-    },
-    experiments: {
-        outputModule: true
+            name: 'RTWidgetMedals',
+            type: 'umd',
+            umdNamedDefine: true
+        },
+        globalObject: 'this'
     },
     externals: {
-        react: 'react',
-        'react-dom': 'react-dom'
+        react: {
+            commonjs: 'react',
+            commonjs2: 'react',
+            amd: 'react',
+            root: 'React'
+        },
+        'react-dom': {
+            commonjs: 'react-dom',
+            commonjs2: 'react-dom',
+            amd: 'react-dom',
+            root: 'ReactDOM'
+        }
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js', '.jsx']

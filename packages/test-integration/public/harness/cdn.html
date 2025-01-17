@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Widget Medals - CDN Style Test</title>
+    <!-- Load React and ReactDOM from CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <!-- Load our widget bundle -->
+    <script src="/widget-medals/index.js"></script>
+  </head>
+  <body>
+    <div id="widget-container"></div>
+    <script>
+      // Use the global RTWidgetMedals object
+      const container = document.getElementById('widget-container');
+      const root = ReactDOM.createRoot(container);
+      const MedalsWidget = RTWidgetMedals.MedalsWidget;
+      
+      root.render(
+        React.createElement(MedalsWidget, { title: "CDN Style Widget" },
+          React.createElement('div', null, "Testing CDN-style loading")
+        )
+      );
+    </script>
+  </body>
+</html> 
