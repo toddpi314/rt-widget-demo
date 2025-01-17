@@ -50,10 +50,24 @@ module.exports = {
       {
         directory: path.join(__dirname, '../widget-medals/dist'),
         publicPath: '/widget-medals'
+      },
+      {
+        directory: path.join(__dirname, '../widget-medals/dist/web-components'),
+        publicPath: '/widget-medals/web-components'
+      },
+      {
+        directory: path.join(__dirname, '../widget-medals/dist/federation'),
+        publicPath: '/widget-medals/federation'
       }
     ],
     port: 8080,
     hot: true,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
+      "Content-Security-Policy": "default-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://unpkg.com; style-src 'self' 'unsafe-inline';"
+    }
   },
   plugins: [
     // Create an HTML file for each scenario
@@ -65,10 +79,30 @@ module.exports = {
         chunks: [name],
       });
     }),
-    // CDN-style page (no webpack bundle)
+    // Non-bundled pages
     new HtmlWebpackPlugin({
       template: './public/harness/cdn.html',
       filename: 'cdn.html',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/harness/script-embed.html',
+      filename: 'script-embed.html',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/harness/iframe-embed.html',
+      filename: 'iframe-embed.html',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/harness/web-component.html',
+      filename: 'web-component.html',
+      inject: false,
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/harness/federation.html',
+      filename: 'federation.html',
       inject: false,
     }),
     // Index page listing all scenarios
@@ -77,7 +111,14 @@ module.exports = {
       filename: 'index.html',
       inject: false,
       templateParameters: {
-        scenarios: [...scenarioFiles.map(f => f.replace('.js', '')), 'cdn'],
+        scenarios: [
+          ...scenarioFiles.map(f => f.replace('.js', '')),
+          'cdn',
+          'script-embed',
+          'iframe-embed',
+          'web-component',
+          'federation'
+        ],
       },
     }),
   ],

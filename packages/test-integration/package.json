@@ -7,7 +7,7 @@
     "build": "webpack --config webpack.config.js",
     "test": "playwright test",
     "test:debug": "playwright test --debug",
-    "serve-and-test": "start-server-and-test 'start' 'http://localhost:8080/basic.html' 'test'"
+    "serve-and-test": "start-server-and-test start http://localhost:8080/basic.html test"
   },
   "dependencies": {
     "@playwright/test": "1.49.1",
