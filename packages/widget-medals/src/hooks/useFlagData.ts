@@ -1,11 +1,20 @@
 import { getFlagAssetUrl } from '../app.config';
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 
 export const useFlagData = () => {
+    const flagCache = useMemo(() => new Map<string, string>(), []);
+
     const getFlagCallback = useCallback((flagKey: string) => {
         if (!flagKey) return '';
-        return getFlagAssetUrl(flagKey);
-    }, []);
+        
+        if (flagCache.has(flagKey)) {
+            return flagCache.get(flagKey)!;
+        }
+
+        const url = getFlagAssetUrl(flagKey);
+        flagCache.set(flagKey, url);
+        return url;
+    }, [flagCache]);
 
     return { getFlagAssetUrl: getFlagCallback };
 };
